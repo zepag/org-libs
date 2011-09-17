@@ -1,0 +1,229 @@
+Spring Framework Integration
+
+	You can easily use Usurper in the context of Spring framework thanks to the helpers Usurper provides.
+	
+* <<Ready-to-use factory beans>>
+		
+		Usurper provides factory beans helping you to generate Usurpers and declare them as beans with Spring framework.
+	
+	* For Spring framework \< 2.0 :
+		
+		* Creating one bean instance
+	
+------------------------------------------------------------------
+...
+<bean id="dummyVO" class="org.org.usurper.springframework.UsurperFactoryBean">
+	<property name="usurpedClassName" value="org.org.usurper.dummydomain.DummyVO"/>
+</bean>
+...
+------------------------------------------------------------------
+
+		When you then retrieve the "dummyVO" bean, you will receive a completely <Usurped> bean ;).
+		
+		* Creating a List, Set or Map of beans
+	
+------------------------------------------------------------------
+...
+<bean id="dummyVOList" class="org.org.usurper.springframework.UsurperListFactoryBean">
+	<property name="usurpedClassName" value="org.org.usurper.dummydomain.DummyVO"/>
+	<!-- optional count,default count is 10 -->
+	<property name="count" value="50"/>
+</bean>
+
+<bean id="dummyVOSet" class="org.org.usurper.springframework.UsurperSetFactoryBean">
+	<property name="usurpedClassName" value="org.org.usurper.dummydomain.DummyVO"/>
+	<!-- optional count,default count is 10 -->
+	<property name="count" value="50"/>
+</bean>
+
+<bean id="dummyVOMap" class="org.org.usurper.springframework.UsurperMapFactoryBean">
+	<property name="usurpedKeyClassName" value="org.org.usurper.dummydomain.DummyVO"/>
+	<property name="usurpedValueClassName" value="org.org.usurper.dummydomain.OtherDummyVO"/>
+	<!-- optional count,default count is 10 -->
+	<property name="count" value="50"/>
+</bean>
+...
+------------------------------------------------------------------
+
+		When you then retrieve the "dummyVOList" bean, you will receive a List of completely <Usurped> beans ;).
+		When you then retrieve the "dummyVOSet" bean, you will receive a Set of completely <Usurped> beans ;).
+		When you then retrieve the "dummyVOMap" bean, you will receive a Map of completely <Usurped> beans ;) (both for key and value).
+		
+		* Creating an UsurperGeneratorSetup
+		
+		An UsurperGeneratorSetup can be created and then injected into one of the previous GeneratorFactoryBeans (or directly in an UsurperGenerator instance).
+		For example:
+
+------------------------------------------------------------------
+...
+<bean id="customSetup" class="org.org.usurper.springframework.UsurperGeneratorSetupFactoryBean">
+	<property name="onMissingHandlers" value="skip" />
+	<property name="propertyTypeHandlersClassNames">
+		<map>
+			<entry key="java.math.BigInteger" value="org.org.usurper.dummydomain.BigIntegerHandler" />
+		</map>
+	</property>
+	<property name="specificPropertyHandlersClassNames">
+		<map>
+			<entry key="org.org.usurper.dummydomain.DummyVO.stringField" value="org.org.usurper.dummydomain.SpecificStringFieldHandler" />
+		</map>
+	</property>
+</bean>
+
+<bean id="dummyVOList" class="org.org.usurper.springframework.UsurperListFactoryBean">
+	<property name="usurperGeneratorSetup" ref="customSetup"/>
+	<property name="usurpedClassName" value="org.org.usurper.dummydomain.DummyVO"/>
+	<!-- optional count,default count is 10 -->
+	<property name="count" value="50"/>
+</bean>
+...
+------------------------------------------------------------------
+
+		This factory bean provides a lot of parameters for advanced setup (see Usurper's javadoc).
+	
+	* For Spring framework \> 2.0 :
+	
+	Spring 2.0 introduces Namespacehandlers allowing a more concise configuration.
+	You first have to use the schema-based configuration.
+	Schemas are available at the following address: {{{http://www.org-libs.org/org-lib-usurper/schema/generators/}http://www.org-libs.org/org-lib-usurper/schema/generators/}}.
+	
+------------------------------------------------------------------
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+</beans>
+------------------------------------------------------------------
+	
+	You then introduce the <Usurper Namespace>:
+
+------------------------------------------------------------------
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:usurper="http://www.org-libs.org/org-lib-usurper/schema/generators" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.org-libs.org/org-lib-usurper/schema/generators http://www.org-libs.org/org-lib-usurper/schema/generators/usurper-1.0.0.xsd">
+</beans>
+------------------------------------------------------------------
+
+	You can then leverage the usurper namespace:
+
+------------------------------------------------------------------
+<beans 
+ ...>
+	
+	<!-- creating a setup -->
+	<usurper:setup id="customSetup" on-missing-handlers="skip">
+		<usurper:property-type-handler property-type="java.math.BigInteger" handler-class="org.org.usurper.dummydomain.BigIntegerHandler" />
+		<usurper:specific-property-handler target-class="org.org.usurper.dummydomain.DummyVO" target-property="stringField" handler-class="org.org.usurper.dummydomain.SpecificStringFieldHandler" />
+	</usurper:setup>
+			
+	<!-- creates a bean -->
+	<usurper:bean-generator id="dummyVO" class="org.org.usurper.dummydomain.DummyVO" setup-ref="customSetup"/>
+	
+	<!-- creates a list of beans -->
+	<usurper:list-generator id="dummyVOList" class="org.org.usurper.dummydomain.DummyVO" count="50" setup-ref="customSetup"/>
+	
+	<!-- creates a set of beans -->
+	<usurper:set-generator id="dummyVOSet" class="org.org.usurper.dummydomain.DummyVO" count="50" setup-ref="customSetup"/>
+	
+	<!-- creates a map of beans -->
+	<usurper:map-generator id="dummyVOMap" keyclass="org.org.usurper.dummydomain.DummyVO" count="50" setup-ref="customSetup"/>
+</beans>
+------------------------------------------------------------------
+
+* <<AOP Proxy>>
+	
+	You can now setup an AOP Proxy based on a given interface. This proxy will therefore return generated <Usurped> beans.
+
+	<N.B.:>In the following examples, a phony DAO interface is used.
+	
+	<<Please note that the use of Generics return types for collections and the use of Collection interfaces are mandatory.>>
+	
+------------------------------------------------------------------
+package org.org.usurper.dummydomain;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public interface IDummyDAO {
+    public DummyVO getVO(String param);
+    public List<DummyVO> getVOList(String param);
+    public Set<DummyVO> getVOSet(String param);
+    public Map<DummyVO, OtherDummyVO> getVOMap(String param);
+}
+------------------------------------------------------------------
+
+	
+	* For Spring framework \< 2.0 :
+
+------------------------------------------------------------------
+	<bean id="usurperInterceptor" class="org.org.usurper.springframework.aop.UsurperMethodInterceptor" />
+	<bean id="dummyDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>org.org.usurper.dummydomain.IDummyDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>usurperInterceptor</value>
+			</list>
+		</property>
+	</bean>
+------------------------------------------------------------------
+	
+	You can then retrieve the "dummyDAO" bean.
+	If you call the "getVO(...)" method, it will return an usurped bean.
+	If you call the "getVOList(...)" method, it will return a list of usurped beans.
+	If you call the "getVOSet(...)" method, it will return a set of usurped beans.
+	If you call the "getVOMap(...)" method, it will return a map of usurped beans (both key and value).
+	
+	* For Spring framework \> 2.0 :
+	
+	Spring 2.0 introduces Namespacehandlers allowing a more concise configuration.
+	You first have to use the schema-based configuration.
+	Schemas are available at the following address: {{{http://www.org-libs.org/org-lib-usurper/schema/generators/}http://www.org-libs.org/org-lib-usurper/schema/generators/}}.
+	
+------------------------------------------------------------------
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+</beans>
+------------------------------------------------------------------
+	
+	You then introduce the <Usurper Namespace>:
+
+------------------------------------------------------------------
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:usurper="http://www.org-libs.org/org-lib-usurper/schema/generators" 
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.org-libs.org/org-lib-usurper/schema/generators http://www.org-libs.org/org-lib-usurper/schema/generators/usurper-1.0.0.xsd">
+</beans>
+------------------------------------------------------------------
+
+	You can then leverage the usurper namespace:
+
+------------------------------------------------------------------
+<beans 
+	...>
+	
+	<!-- creating a setup -->
+	<usurper:setup id="customSetup" on-missing-handlers="skip">
+		<usurper:property-type-handler property-type="java.math.BigInteger" handler-class="org.org.usurper.dummydomain.BigIntegerHandler" />
+		<usurper:specific-property-handler target-class="org.org.usurper.dummydomain.DummyVO" target-property="stringField" handler-class="org.org.usurper.dummydomain.SpecificStringFieldHandler" />
+	</usurper:setup>
+		
+	<!-- creates a proxy -->
+	<usurper:aop-generator id="dummyDAO" interface="org.org.usurper.dummydomain.IDummyDAO" setup-ref="customSetup"/>
+</beans>
+------------------------------------------------------------------
+	
+	

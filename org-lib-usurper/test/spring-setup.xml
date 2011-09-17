@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:usurper="http://www.org-libs.org/org-lib-usurper/schema/generators" xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.org-libs.org/org-lib-usurper/schema/generators ../src/usurper-1.0.0.xsd">
+
+	<bean id="bigDecimalPropertyType" class="org.org.usurper.model.PropertyTypeDefinition">
+		<constructor-arg type="java.lang.Class" value="java.math.BigDecimal"></constructor-arg>
+	</bean>
+	<bean id="dummyVOIntegerField" class="org.org.usurper.model.SpecificPropertyDefinition">
+		<constructor-arg type="java.lang.Class" value="org.org.usurper.dummydomain.DummyVO" />
+		<constructor-arg type="java.lang.String" value="integerField" />
+	</bean>
+	<bean id="countCallback" class="org.org.usurper.dummydomain.DummyCountCallback" />
+	<bean id="bigDecimalHandler" class="org.org.usurper.dummydomain.BigDecimalHandler">
+		<constructor-arg type="java.util.Set">
+			<list>
+				<ref bean="bigDecimalPropertyType" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="specificIntegerFieldHandler" class="org.org.usurper.dummydomain.SpecificIntegerFieldHandler">
+		<constructor-arg type="org.org.usurper.model.SpecificPropertyDefinition" ref="dummyVOIntegerField" />
+	</bean>
+
+
+	<bean id="usurperGeneratorSetupClassic" class="org.org.usurper.springframework.UsurperGeneratorSetupFactoryBean">
+		<!-- setting up an arrayHandler class-->
+		<property name="arrayHandlerName" value="org.org.usurper.handlers.basic.ArrayHandler" />
+		<!-- setting up an enumHandler class-->
+		<property name="enumHandlerName" value="org.org.usurper.handlers.basic.EnumHandler" />
+		<!-- setting up a collection count callback class-->
+		<property name="countCallbackName" value="org.org.usurper.dummydomain.DummyCountCallback" />
+		<property name="onMissingHandlers" value="skip" />
+		<property name="propertyWritingMechanism" value="use_setters" />
+		<property name="propertyTypeHandlers">
+			<set>
+				<ref bean="bigDecimalHandler" />
+			</set>
+		</property>
+		<property name="specificPropertyHandlers">
+			<set>
+				<ref bean="specificIntegerFieldHandler" />
+			</set>
+		</property>
+
+		<property name="propertyTypeHandlersClassNames">
+			<map>
+				<entry key="java.math.BigInteger" value="org.org.usurper.dummydomain.BigIntegerHandler" />
+			</map>
+		</property>
+		<property name="specificPropertyHandlersClassNames">
+			<map>
+				<entry key="org.org.usurper.dummydomain.DummyVO.stringField" value="org.org.usurper.dummydomain.SpecificStringFieldHandler" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="usurperGeneratorSetupClassic2" class="org.org.usurper.springframework.UsurperGeneratorSetupFactoryBean">
+		<property name="parentSetup" ref="usurperGeneratorSetupClassic" />
+	</bean>
+</beans>

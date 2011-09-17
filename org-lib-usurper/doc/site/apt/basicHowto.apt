@@ -1,0 +1,353 @@
+How to use the Usurper library.
+	
+	This library generates one or many ValueObject instances for test or prototyping purposes.
+	
+* How does it work?
+	
+	You have to create an <UsurperGenerator>. This <UsurperGenerator> will be able to create instances of your Value Object by instrospecting them and calling handlers to generate their properties' values.
+
+	An UsurperGenerator manages a list of different type of handlers used for the generation of properties' values :
+	
+	* <<Type handlers>> : These handlers handle the generation of all properties of a given type.
+		
+		You can easily add one by extending the abstract <PropertyTypeHandler> class.
+		
+		Default Handlers generating random values for the following types of properties are already registered :
+		
+		* all the primitive types (boolean,int,byte...etc)
+		
+		* all the corresponding Object types (Boolean,Integer,Byte...etc)
+		
+		* <org.w3c.Document> and <java.util.Date>
+		
+		* Lists, Sets and Maps of any handled types (even custom ones you added).
+		
+		These type handlers are mostly examples. You can register your own instead of them.
+
+	*	<<Specific Property handlers>> : These handlers will be triggered on a given property of a given Value Object.
+	
+		There are no default provided handlers, but you can easily implement one by extending the abstract <SpecificPropertyHandler> class.
+		
+	*	<<Array Handler>> : This one should not be overriden.
+
+	*	<<Enum Handler>> : This one should not be overriden.		
+ 
+* Simple Examples of use
+
+	* <<Value Object with no additional handler needed>>
+	
+	Code for our ValueObject :
+	
+------------------------------------------------------------------
+public class User{
+	private String firstName;
+	
+	private String lastName;
+	
+	private Integer age;
+	
+	private boolean administrator;
+	
+	// getters and setters ...toString() method...
+}
+------------------------------------------------------------------
+
+	Usurper in action :
+	
+------------------------------------------------------------------
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class);
+
+
+// GENERATE A USER VALUE OBJECT
+User user = userGenerator.generateUsurper();
+System.out.println(user);
+
+
+// GENERATE A LIST OF USER VALUE OBJECTS
+List<User> userList = userGenerator.generateUsurperList(3);
+System.out.println("##############################");
+System.out.println(userList);
+------------------------------------------------------------------
+
+	Running the above code will result in the following output :
+	
+------------------------------------------------------------------
+org.org.usurper.User@1632c2d[
+  lastName=dCOuSJOZQZ
+  administrator=false
+  age=814857147
+  firstName=Zq8R9bH7LJ
+]
+##############################
+[org.org.usurper.User@1d4c61c[
+  lastName=kFo2ae5dz7
+  administrator=false
+  age=1653110873
+  firstName=YU7l5ouO4b
+], org.org.usurper.User@1a626f[
+  lastName=kqkZsV0z7b
+  administrator=true
+  age=739753668
+  firstName=7iXf2ep80a
+], org.org.usurper.User@34a1fc[
+  lastName=UjFJD0a0IU
+  administrator=true
+  age=1514331703
+  firstName=PBgKsu0RWF
+]]
+------------------------------------------------------------------
+
+	Note that if you have interfaces for your Value Object, you can specify it the following way (in this example, the interface is <IUser>) :
+	
+------------------------------------------------------------------
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<IUser> userGenerator = new UsurperGenerator<IUser>(User.class);
+
+
+// GENERATE A USER VALUE OBJECT
+IUser user = userGenerator.generateUsurper();
+-------------------------------------------------------------------
+
+	* <<Value Object with an additional type handler>>
+	
+	Let's add an additional <BigInteger> field to our Value Object :
+	
+------------------------------------------------------------------
+public class User{
+	private String firstName;
+	
+	private String lastName;
+	
+	private Integer age;
+	
+	private boolean administrator;
+	
+	private BigInteger accountId;
+	
+	// getters and setters ...toString() method...
+}
+------------------------------------------------------------------
+
+	Usurper in action :
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+usurperGeneratorSetup.registerPropertyTypeHandler(new PropertyTypeHandler(new PropertyTypeDefinition(BigInteger.class)) {
+    // this method is used for handling properties
+    public Object handle(HandledBeanProperty handledBeanProperty) {
+        return new BigInteger(24, new Random());
+    }
+    // this method is used for handling constructor arguments (in the case of Immutable objects for example)
+    public Object handle(HandledConstructorArg handledConstructorArg) {
+        return new BigInteger(24, new Random());
+    }
+});
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class,usurperGeneratorSetup);
+
+// GENERATE A USER VALUE OBJECT
+User user = userGenerator.generateUsurper();
+System.out.println(user);
+
+
+// GENERATE A LIST OF USER VALUE OBJECTS
+List<User> userList = userGenerator.generateUsurperList(3);
+System.out.println("##############################");
+System.out.println(userList);
+------------------------------------------------------------------
+
+	Running the above code will result in the following output :
+	
+------------------------------------------------------------------
+org.org.usurper.User@19106c7[
+  accountId=8467078
+  lastName=wbO58gDRZK
+  administrator=true
+  age=1869095929
+  firstName=tTvoGpgCel
+]
+##############################
+[org.org.usurper.User@11b9fb1[
+  accountId=9256785
+  lastName=ypN0tWwQyw
+  administrator=true
+  age=1075184110
+  firstName=az3JAoudql
+], org.org.usurper.User@913fe2[
+  accountId=491878
+  lastName=pR4laDYMGz
+  administrator=false
+  age=1663181803
+  firstName=0ECqO1f20K
+], org.org.usurper.User@1f934ad[
+  accountId=11826045
+  lastName=st4qxwPTYc
+  administrator=false
+  age=1122907147
+  firstName=sdB3Lxlq23
+]]
+------------------------------------------------------------------
+
+	* <<Value Object with a specific property handler>>
+	
+	The above scenario can be solved by making a specific handler for the <accountId> property of the <User> value object.
+	
+	Usurper in action :
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+usurperGeneratorSetup.registerSpecificPropertyHandler(new SpecificPropertyHandler(new SpecificPropertyDefinition(User.class, "accountId")) {
+    // this method is used for handling properties
+    public Object handle(HandledBeanProperty handledBeanProperty) {
+        return new BigInteger(24, new Random());
+    }
+    // this method is used for handling constructor arguments (in the case of Immutable objects for example)
+    public Object handle(HandledConstructorArg handledConstructorArg) {
+        return new BigInteger(24, new Random());
+    }
+});
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class,usurperGeneratorSetup);
+
+// GENERATE A USER VALUE OBJECT
+User user = userGenerator.generateUsurper();
+System.out.println(user);
+
+// GENERATE A LIST OF USER VALUE OBJECTS
+List<User> userList = userGenerator.generateUsurperList(3);
+System.out.println("##############################");
+System.out.println(userList);
+------------------------------------------------------------------
+	
+	As the handling code is the same, the result will be almost identical to the type handler (statistically with different values of course, as the handling code generates Random values).
+	
+	* <<Value Object with a Value Object property>>
+
+	Let's add an <Address> Value Object to our <User> Value Object as a property.
+	
+------------------------------------------------------------------
+public class User{
+	private String firstName;
+	
+	private String lastName;
+	
+	private Integer age;
+	
+	private boolean administrator;
+	
+	private Address address;
+	
+	// getters and setters ...toString() method...
+}
+
+public class Address {
+    private int streetNumber;
+
+    private String street;
+
+    private String town;
+
+    private int zipcode;
+	
+	// getters and setters ...toString() method...
+}
+------------------------------------------------------------------
+
+	Usurper in action :
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+usurperGeneratorSetup.registerPropertyTypeHandler(new ValueObjectPropertyTypeHandler(new PropertyTypeDefinition(Address.class)));
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class,usurperGeneratorSetup);
+
+// GENERATE A USER VALUE OBJECT
+User user = userGenerator.generateUsurper();
+System.out.println(user);
+
+// GENERATE A LIST OF USER VALUE OBJECTS
+List<User> userList = userGenerator.generateUsurperList(3);
+System.out.println("##############################");
+System.out.println(userList);
+------------------------------------------------------------------
+
+	Running the above code will result in the following output :
+	
+------------------------------------------------------------------
+org.org.usurper.User@19106c7[
+  lastName=N2SxnwPzty
+  administrator=true
+  age=954415394
+  address=org.org.usurper.Address@34a1fc[
+	  zipcode=1506702768
+	  town=Fe0dsyyTdO
+	  street=0FIK1EYutO
+	  streetNumber=110714603
+	]
+  firstName=oVQkRDNHbL
+]
+##############################
+[org.org.usurper.User@913fe2[
+  lastName=AWqv8Q0f5e
+  administrator=true
+  age=1613096496
+  address=org.org.usurper.Address@1f934ad[
+	  zipcode=978179195
+	  town=e9mS5VBFqC
+	  street=3rWF7ELyeW
+	  streetNumber=307013225
+	]
+  firstName=DSDxZNOakE
+], org.org.usurper.User@1f14ceb[
+  lastName=8FLgzHlX6b
+  administrator=false
+  age=490303813
+  address=org.org.usurper.Address@f0eed6[
+	  zipcode=1736625903
+	  town=QqqN8MKfn9
+	  street=mtszdr0fCO
+	  streetNumber=459057471
+	]
+  firstName=UeHpXmd3uw
+], org.org.usurper.User@1d05c81[
+  lastName=MQhTupCHI4
+  administrator=false
+  age=855690057
+  address=org.org.usurper.Address@691f36[
+	  zipcode=204280680
+	  town=SroMBjZW2l
+	  street=d9HIZgXkrj
+	  streetNumber=146652797
+	]
+  firstName=dSVeVeYYoc
+]]
+------------------------------------------------------------------	
+
+	* <<Value Object with array property(ies)>>
+	
+	Arrays of any of the handled types can be handled too.
+	
+	So you can generate arrays of basic types as well as arrays of Value Objects with the exact same code as above!
+
+	* <<Value Object with collection property(ies)>>
+	
+	Arrays of any of the following collections can be generated : <List>, <Set> and <Map>.
+	
+	But there are a few prerequisites :
+	
+		* the property must be declared as a <List>, <Set> or <Map> strictly, not as an implementation.
+		
+		* the property must be declared using Generics :
+
+------------------------------------------------------------------
+...		
+	private	List<String> listOfStrings;
+...
+------------------------------------------------------------------

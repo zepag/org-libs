@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:usurper="http://www.org-libs.org/org-lib-usurper/schema/generators" xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.org-libs.org/org-lib-usurper/schema/generators usurper-1.0.0.xsd">
+	<bean id="usurperInterceptor" class="org.org.usurper.springframework.aop.UsurperMethodInterceptor" />
+	<bean id="DummyDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces">
+			<value>org.org.usurper.dummydomain.IDummyDAO</value>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>usurperInterceptor</value>
+			</list>
+		</property>
+	</bean>
+</beans>

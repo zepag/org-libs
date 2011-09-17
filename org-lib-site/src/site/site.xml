@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ORG">
+	<skin>
+		<groupId>org.org-libs</groupId>
+		<artifactId>org-maven2-skin</artifactId>
+		<version>1.0.0</version>
+	</skin>
+	<bannerLeft>
+		<name>ORG</name>
+		<src>./images/logo.png</src>
+		<href>./index.html</href>
+	</bannerLeft>
+	<body>
+		<menu name="Libraries">
+			<item name="Usurper" href="http://www.org-libs.org/org-lib-usurper" />
+		</menu>
+	</body>
+</project>

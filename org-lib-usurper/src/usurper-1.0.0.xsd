@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.org-libs.org/org-lib-usurper/schema/generators" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.org-libs.org/org-lib-usurper/schema/generators" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:complexType name="generator-base" abstract="true">
+		<xsd:attribute name="id" type="xsd:ID" use="required" />
+		<xsd:attribute name="setup-ref" type="xsd:string" use="optional" />
+	</xsd:complexType>
+	<xsd:element name="bean-generator">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generate an Usurper for a Value Object (or Data Transfer Object). and expose it as a bean. For example
+				<code>&lt;usurper:bean-generator class=&quot;org.org.usurper.dummydomain.DummyVO&quot; /&gt;</code>
+				.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="generator-base">
+					<xsd:attribute name="class" type="xsd:string" use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="list-generator">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generate a List of Usurpers of a Value Object (or Data Transfer Object). and expose it as a bean. For example
+				<code>&lt;usurper:list-generator class=&quot;org.org.usurper.dummydomain.DummyVO&quot; /&gt;</code>
+				Default length for the list is 10, but you can change it using the count attribute.
+				<code>&lt;usurper:list-generator class=&quot;org.org.usurper.dummydomain.DummyVO&quot; count=&quot;50&quot; /&gt;</code>
+				.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="generator-base">
+					<xsd:attribute name="class" type="xsd:string" use="required" />
+					<xsd:attribute name="count" type="xsd:string" use="optional" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="set-generator">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generate a Set of Usurpers of a Value Object (or Data Transfer Object). and expose it as a bean. For example
+				<code>&lt;usurper:set-generator class=&quot;org.org.usurper.dummydomain.DummyVO&quot; /&gt;</code>
+				Default length for the set is 10, but you can change it using the count attribute.
+				<code>&lt;usurper:set-generator class=&quot;org.org.usurper.dummydomain.DummyVO&quot; count=&quot;50&quot; /&gt;</code>
+				.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="generator-base">
+					<xsd:attribute name="class" type="xsd:string" use="required" />
+					<xsd:attribute name="count" type="xsd:string" use="optional" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="map-generator">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generate a Map of Usurpers of a pair of Value Objects (or Data Transfer Objects), one for the key and one for the value. and expose it as a bean. For example
+				<code>&lt;usurper:map-generator key-class=&quot;org.org.usurper.dummydomain.DummyVO&quot; value-class=&quot;org.org.usurper.dummydomain.SonOfDummyWithChildVO&quot; /&gt;</code>
+				Default length for the map is 10, but you can change it using the count attribute.
+				<code>&lt;usurper:map-generator key-class=&quot;org.org.usurper.dummydomain.DummyVO&quot; value-class=&quot;org.org.usurper.dummydomain.SonOfDummyWithChildVO&quot; count=&quot;50&quot; /&gt;</code>
+				.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="generator-base">
+					<xsd:attribute name="key-class" type="xsd:string" use="required" />
+					<xsd:attribute name="value-class" type="xsd:string" use="required" />
+					<xsd:attribute name="count" type="xsd:string" use="optional" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="aop-generator">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generates a proxy on a given interface, that returns Usurpers instead of real values, and expose it as a bean. For example
+				<code>&lt;usurper:aop-generator interface=&quot;org.org.usurper.dummydomain.IDummyDAO&quot; /&gt;</code>
+				When you call the methods of this proxied DAO, usurpers will be generated and returned .
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="generator-base">
+					<xsd:attribute name="interface" type="xsd:string" use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="setup">
+		<xsd:annotation>
+			<xsd:documentation>
+				Generates a usurper setup then available for reuse by multiple generator implementations. For example <code>
+					&lt;usurper:setup id=&quot;customSetup&quot; on-missing-handlers=&quot;skip&quot; &gt;
+						&lt;usurper:property-type-handler property-type=&quot;java.math.BigDecimal&quot; handler-class=&quot;org.org.usurper.dummydomain.BigDecimalHandler&quot; /&gt;
+					&lt;usurper:setup&gt;
+				</code>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="property-type-handler" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="property-type" type="xsd:string" use="required" />
+						<xsd:attribute name="handler-class" type="xsd:string" use="required" />
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="property-type-handler-ref" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="handler-ref" type="xsd:string" use="required" />
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="specific-property-handler" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="target-class" type="xsd:string" use="required" />
+						<xsd:attribute name="target-property" type="xsd:string" use="required" />
+						<xsd:attribute name="handler-class" type="xsd:string" use="required" />
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="specific-property-handler-ref" minOccurs="0" maxOccurs="unbounded">
+					<xsd:complexType>
+						<xsd:attribute name="handler-ref" type="xsd:string" use="required" />
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="id" type="xsd:ID" use="required" />
+			<xsd:attribute name="parent-setup" type="xsd:string" use="optional" />
+			<xsd:attribute name="array-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="array-handler-ref" type="xsd:string" use="optional" />
+			<xsd:attribute name="enum-handler" type="xsd:string" use="optional" />
+			<xsd:attribute name="enum-handler-ref" type="xsd:string" use="optional" />
+			<xsd:attribute name="on-missing-handlers" use="optional">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="fail" />
+						<xsd:enumeration value="skip" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="property-writing-mechanism" use="optional">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:NMTOKEN">
+						<xsd:enumeration value="use_setters" />
+						<xsd:enumeration value="modify_attributes_directly" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="count-callback-ref" type="xsd:string" use="optional" />
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

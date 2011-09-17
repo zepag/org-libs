@@ -1,0 +1,79 @@
+Additional configuration
+
+	No real configuration needed, but you can tweak additional parameters on the <UsurperGenerator>.
+	
+* <<Default behaviour for missing handlers>>
+		
+		You can specify if you want it to <fail on a property with no handler defined>, or if you want it to <skip the property and leave it with a null value>.
+	The default behaviour is to fail when a handler is missing.
+	
+	This is done this way :
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+// TELL IT TO SKIP PROPERTIES WITH NO DEFINED HANDLER
+usurperGeneratorSetup.onMissingHandler(OnMissingHandlers.SKIP);
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class,usurperGeneratorSetup);
+------------------------------------------------------------------
+
+* <<Default mechanism used for writing properties>>
+		
+		You can specify if you want it to <write properties using their setters>, or if you want it to <directly modify all the available properties, regardless of its modifiers (public, private...etc)>.
+	The default behaviour is to write properties using their setters.
+	
+	This is done this way :
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+// TELL IT TO WRITE PROPERTIES DIRECTLY WITHOUT USING THE PUBLIC SETTERS
+usurperGeneratorSetup.usePropertyWritingMechanism(PropertyWritingMechanism.MODIFY_ATTRIBUTES_DIRECTLY);
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class,usurperGeneratorSetup);
+------------------------------------------------------------------
+
+* <<Describe the constructor to use if any>>
+		
+		You can describe the constructor to use for Immutable or Partially Immutable Objects.
+	The default behaviour is to use the smallest constructor with all handlers available.
+	So for an object like:
+
+------------------------------------------------------------------
+public class User{
+	private final String firstName;
+	
+	private final String lastName;
+	
+	private final Integer age;
+	
+	private final Boolean administrator;
+	
+	private final Address address;
+	
+	public User(final String firstName,final String lastName,final Integer age, final Boolean administrator,final Address address){
+		// constructor stuff
+	}
+	public User(final String firstName,final String lastName){
+		this(firstName,lastName,null,null,null);
+	}
+	// toString() method...
+}
+------------------------------------------------------------------	
+	
+	This is done this way:
+	
+------------------------------------------------------------------
+// PREPARE USURPER GENERATOR SETUP
+UsurperGeneratorSetup usurperGeneratorSetup=new UsurperGeneratorSetup();
+
+// CREATE THE USURPER GENERATOR
+UsurperGenerator<User> userGenerator = new UsurperGenerator<User>(User.class);
+// LIST THE CONSTRUCTOR'S PARAMETER TYPES USING THE FOLLOWING METHOD (parameter is a Class<?>... vararg)
+usurperGenerator.useConstructor(String.class,String.class,Integer.class,Boolean.class,Address.class);
+------------------------------------------------------------------
+
+	The parameters of the constructor will be dealt with the very same handlers mechanism also used for properties.

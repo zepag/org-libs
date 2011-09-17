@@ -1,0 +1,23 @@
+Welcome to the release site of the Usurper library.
+
+	This library allows you to generate Value Object easily for test or prototyping purposes.
+	
+	<<New in version 1.1.0!>>  Richer setup, no more dependencies to commons-lang, and Spring framework helpers.
+	
+[./images/code-logo.jpg]
+
+* What do I use it for?
+
+	Usurper is mainly useful for the creation of Test data for Stubs.
+	It can easily help you to create DAO Stubs returning phony data for example.
+	
+	Usurper can help creating a Service stub, just from the service's interface.
+	
+	Usurper can also be used for prototyping purposes.
+	You can easily generate phony data for your GUI to display.
+
+* How does it work?
+
+	You can browse the Link to {{{./basicHowto.html}Basic concepts}} if you want to know how to use this library.
+	You can then browse the Link to {{{./additionalConfiguration.html}Additional Configuration}} if you want to know how to further configure this library.
+	You can also browse the Link to {{{./springIntegration.html}Spring Integration}} if you want to know how to leverage Usurper with the Spring Framework.

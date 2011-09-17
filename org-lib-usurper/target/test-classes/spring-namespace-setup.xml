@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:usurper="http://www.org-libs.org/org-lib-usurper/schema/generators" xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.org-libs.org/org-lib-usurper/schema/generators usurper-1.0.0.xsd">
+	<bean id="bigDecimalPropertyType" class="org.org.usurper.model.PropertyTypeDefinition">
+		<constructor-arg type="java.lang.Class" value="java.math.BigDecimal"></constructor-arg>
+	</bean>
+	<bean id="dummyVOIntegerField" class="org.org.usurper.model.SpecificPropertyDefinition">
+		<constructor-arg type="java.lang.Class" value="org.org.usurper.dummydomain.DummyVO" />
+		<constructor-arg type="java.lang.String" value="integerField" />
+	</bean>
+	<bean id="countCallback" class="org.org.usurper.dummydomain.DummyCountCallback" />
+	<bean id="bigDecimalHandler" class="org.org.usurper.dummydomain.BigDecimalHandler">
+		<constructor-arg type="java.util.Set">
+			<list>
+				<ref bean="bigDecimalPropertyType" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="specificIntegerFieldHandler" class="org.org.usurper.dummydomain.SpecificIntegerFieldHandler">
+		<constructor-arg type="org.org.usurper.model.SpecificPropertyDefinition" ref="dummyVOIntegerField" />
+	</bean>
+
+	<usurper:setup 
+		id="usurperGeneratorSetupNamespace"
+		array-handler="org.org.usurper.handlers.basic.ArrayHandler" 
+		enum-handler="org.org.usurper.handlers.basic.EnumHandler" 
+		on-missing-handlers="skip" 
+		property-writing-mechanism="use_setters" 
+		count-callback-ref="countCallback">
+		<usurper:property-type-handler property-type="java.math.BigInteger" handler-class="org.org.usurper.dummydomain.BigIntegerHandler" />
+		<usurper:property-type-handler-ref handler-ref="bigDecimalHandler" />
+		<usurper:specific-property-handler target-class="org.org.usurper.dummydomain.DummyVO" target-property="stringField" handler-class="org.org.usurper.dummydomain.SpecificStringFieldHandler" />
+		<usurper:specific-property-handler-ref handler-ref="specificIntegerFieldHandler" />
+	</usurper:setup>
+	
+	<usurper:setup id="usurperGeneratorSetupNamespace2" parent-setup="usurperGeneratorSetupNamespace" />
+	
+</beans>

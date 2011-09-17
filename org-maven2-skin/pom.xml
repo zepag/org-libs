@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-skins</artifactId>
+		<version>3</version>
+	</parent>
+	<groupId>org.org-libs</groupId>
+	<artifactId>org-maven2-skin</artifactId>
+	<version>1.0.0</version>
+	<name>ORG Maven2 Skin</name>
+	<description>ORG Maven2 Skin</description>
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+
+		</plugins>
+	</build>
+</project>

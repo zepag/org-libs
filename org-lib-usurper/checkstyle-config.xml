@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This configuration file was written by the eclipse-cs plugin configuration editor-->
+<!--
+temp:
+
+-->
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<module name="Checker">
+<property name="severity" value="warning"/>
+<module name="TreeWalker">
+<module name="JavadocType">
+<property name="severity" value="info"/>
+<property name="scope" value="public"/>
+</module>
+<module name="JavadocMethod">
+<property name="severity" value="info"/>
+<property name="scope" value="public"/>
+</module>
+<module name="JavadocVariable">
+<property name="severity" value="info"/>
+<property name="scope" value="public"/>
+</module>
+<module name="JavadocStyle">
+<property name="severity" value="info"/>
+<property name="scope" value="public"/>
+</module>
+<module name="AbstractClassName">
+<property name="format" value="^Abstract.*$|^.*Factory$|^.*Util$|^.*Utils$"/>
+</module>
+<module name="ConstantName">
+</module>
+<module name="LocalFinalVariableName">
+</module>
+<module name="LocalVariableName">
+</module>
+<module name="MemberName">
+</module>
+<module name="MethodName">
+</module>
+<module name="PackageName">
+<property name="format" value="^org\.org(\.[a-z][a-z0-9]*)*$"/>
+</module>
+<module name="ParameterName">
+</module>
+<module name="StaticVariableName">
+</module>
+<module name="TypeName">
+</module>
+<module name="AvoidStarImport">
+</module>
+<module name="IllegalImport">
+<property name="severity" value="error"/>
+<property name="illegalPkgs" value="sun, com.bea, org.jboss, weblogic"/>
+</module>
+<module name="RedundantImport">
+</module>
+<module name="UnusedImports">
+</module>
+<module name="FileLength">
+<property name="severity" value="info"/>
+</module>
+<module name="MethodLength">
+<property name="severity" value="info"/>
+<property name="countEmpty" value="false"/>
+</module>
+<module name="ParameterNumber">
+<property name="severity" value="info"/>
+</module>
+<module name="OperatorWrap">
+</module>
+<module name="ParenPad">
+</module>
+<module name="TypecastParenPad">
+</module>
+<module name="AvoidNestedBlocks">
+</module>
+<module name="EmptyBlock">
+</module>
+<module name="CovariantEquals">
+</module>
+<module name="DoubleCheckedLocking">
+<property name="severity" value="error"/>
+</module>
+<module name="EmptyStatement">
+</module>
+<module name="EqualsHashCode">
+</module>
+<module name="IllegalCatch">
+<property name="severity" value="info"/>
+</module>
+<module name="MagicNumber">
+<property name="severity" value="info"/>
+<property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16"/>
+</module>
+<module name="MissingSwitchDefault">
+</module>
+<module name="SimplifyBooleanExpression">
+</module>
+<module name="SimplifyBooleanReturn">
+<property name="severity" value="info"/>
+</module>
+<module name="StringLiteralEquality">
+<property name="severity" value="error"/>
+</module>
+<module name="FinalClass">
+</module>
+<module name="HideUtilityClassConstructor">
+</module>
+<module name="InterfaceIsType">
+</module>
+<module name="ThrowsCount">
+<property name="severity" value="info"/>
+<property name="max" value="3"/>
+</module>
+<module name="VisibilityModifier">
+<property name="packageAllowed" value="true"/>
+</module>
+<module name="UpperEll">
+</module>
+<module name="JUnitTestCase">
+</module>
+<module name="CyclomaticComplexity">
+<property name="severity" value="info"/>
+</module>
+<module name="GenericIllegalRegexp">
+<property name="format" value="System\.set"/>
+<property name="message" value="Avoid setting System globals."/>
+</module>
+<module name="j2ee.EntityBean">
+</module>
+<module name="j2ee.FinalStatic">
+</module>
+<module name="j2ee.LocalHomeInterface">
+</module>
+<module name="j2ee.LocalInterface">
+</module>
+<module name="j2ee.MessageBean">
+</module>
+<module name="j2ee.RemoteHomeInterface">
+</module>
+<module name="j2ee.RemoteInterface">
+</module>
+<module name="j2ee.SessionBean">
+</module>
+<module name="j2ee.ThisParameter">
+</module>
+<module name="j2ee.ThisReturn">
+</module>
+</module>
+<module name="Translation">
+</module>
+<module name="StrictDuplicateCode">
+<property name="severity" value="info"/>
+<property name="min" value="10"/>
+</module>
+</module>

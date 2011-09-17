@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.org-libs</groupId>
+	<artifactId>org-libs-site</artifactId>
+	<name>ORG Libraries Web site</name>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+
+	<url>http://www.org-libs.org/</url>
+	<description>Simple tools for java development.</description>
+	<!-- 
+		Before calling site:deploy, first create a shell on shell.sourceforge.net (lasts 240 minutes at this moment)
+		    ssh -t zepag,zepag-vo-gen@shell.sourceforge.net create
+	 -->
+	<distributionManagement>
+		<site>
+			<id>sourceforge.net</id>
+			<url>
+				scp://zepag,zepag-vo-gen@shell.sourceforge.net/home/groups/z/ze/zepag-vo-gen/htdocs
+			</url>
+		</site>
+	</distributionManagement>
+	<scm>
+		<connection>
+			scm:svn:https://svn.assembla.com/svn/org-libs
+		</connection>
+		<developerConnection>
+			scm:svn:https://svn.assembla.com/svn/org-libs
+		</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://svn.assembla.com/svn/org-libs</url>
+	</scm>
+	<build>
+		<defaultGoal>site</defaultGoal>
+		<plugins>
+
+		</plugins>
+	</build>
+	<dependencies>
+
+	</dependencies>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>
+					maven-project-info-reports-plugin
+				</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>dependency-convergence</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>

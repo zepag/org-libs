@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="ORG">
+	<skin>
+		<groupId>org.org-libs</groupId>
+		<artifactId>org-maven2-skin</artifactId>
+		<version>1.0.0</version>
+	</skin>
+	<bannerLeft>
+		<name>ORG</name>
+		<src>./images/logo.png</src>
+		<href>./index.html</href>
+	</bannerLeft>
+	<bannerRight>
+		<name>ORGUsurper</name>
+		<src>./images/usurper.png</src>
+	</bannerRight>
+	<body>
+		<links>
+			<item name="ORG libraries" href="http://www.org-libs.org" />
+		</links>
+		<menu name="Documentation">
+			<item name="Basic concepts" href="basicHowto.html" />
+			<item name="Additional configuration"
+				href="additionalConfiguration.html" />
+			<item name="Integration with Spring framework"
+				href="springIntegration.html" />
+			<item name="Dependencies" href="dependencies.html" />
+			<item name="Licensing" href="license.html" />
+			<item name="Javadoc" href="./apidocs/index.html" />
+		</menu>
+		<menu name="Download Latest">
+			<item name="Zip with dependencies"
+				href="https://sourceforge.net/project/showfiles.php?group_id=143629" />
+			<item name="From Maven 2 repository"
+				href="http://repo2.maven.org/maven2/org/org-libs/org-lib-usurper/" />
+		</menu>
+		<menu name="Quality">
+			<item name="Checkstyle Results" href="checkstyle.html" />
+			<item name="Tag list (TODO...etc)" href="taglist.html" />
+			<item name="Unit tests results" href="surefire-report.html" />
+			<item name="Unit tests coverage"
+				href="cobertura/index.html" />
+			<item name="Unit tests sources Xref"
+				href="xref-test/index.html" />
+			<item name="Java sources Xref" href="xref/index.html" />
+		</menu>
+		<menu name="Source repository">
+			<item name="SCM Changes Log" href="changelog.html" />
+			<item name="SCM access" href="source-repository.html" />
+		</menu>
+		<menu name="Feedback">
+			<item name="Assembla space"
+				href="http://www.assembla.com/spaces/org-libs" />
+			<item name="Issue Tracking" href="issue-tracking.html" />
+			<item name="Project team" href="team-list.html" />
+			<item name="Sourceforge web site"
+				href="http://sourceforge.net/projects/zepag-vo-gen" />
+		</menu>
+	</body>
+</project>
